@@ -1,7 +1,7 @@
 import numpy as np
 
 def increasing_linspace(start, stop, num, base=10):
-	"""Returns a linspace with a base other than 10."""
+    """Returns a linspace with a base other than 10."""
     index = np.logspace(0, 1, num, base=base)
     return np.interp(index, [index.min(), index.max()], [start, stop])
 
