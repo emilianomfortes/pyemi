@@ -1,4 +1,41 @@
+import pandas as pd
 import numpy as np
+
+def grid_deriv(grid, arr):
+    if isinstance(grid, pd.Series):
+        grid = grid.to_numpy()
+    if isinstance(arr, pd.Series):
+        arr = arr.to_numpy()
+    
+    gradi = np.zeros_like(grid)
+    if len(grid) == 1:
+        return gradi
+
+    for k in range(len(grid)):
+      tol = 1e-7
+      if k == 0:
+        h0 = np.inf
+        h1 = grid[k + 1] - grid[k]
+        gradi[k] = (arr[k + 1] - arr[k]) / h1
+
+      elif k == len(grid) - 1:
+        h0 = grid[k] - grid[k - 1]
+        h1 = np.inf
+        gradi[k] = (arr[k] - arr[k - 1]) / h0
+      else:
+        h0 = grid[k] - grid[k - 1]
+        h1 = grid[k + 1] - grid[k]
+        if (h0 < tol) or (h1 < tol):
+            gradi[k] = gradi[k-1]
+        else:
+          gradi[k] = (
+            (arr[k + 1] * h0 / (h1 * (h0 + h1)))
+            + (arr[k] * (h1 - h0) / (h0 * h1))
+            - (arr[k - 1] * h1 / (h0 * (h0 + h1)))
+          )
+    return gradi
+
+
 
 def increasing_linspace(start, stop, num, base=10):
     """Returns a linspace with a base other than 10."""
