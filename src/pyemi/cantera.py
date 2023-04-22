@@ -261,10 +261,10 @@ def EqRat_from_gas_and_df(df, fuel, oxidizer, mech, pressure):
 
 	return df["eq_rat"]
 
-def EqRat_from_Zbilger(Zbilger, beta_fuel, beta_oxi):
+def EqRat_from_Zbilger(ZBilger, beta_fuel, beta_oxi):
 	AF_ratio_st_Bilger = -beta_fuel/beta_oxi
-	Zbilger_st = 1.0 / (1.0 + AF_ratio_st_Bilger)
-	S = 1.0 / Z_st_Bilger - 1.0
+	ZBilger_st = 1.0 / (1.0 + AF_ratio_st_Bilger)
+	S = 1.0 / ZBilger_st - 1.0
 
-	phi = S*((Zbilger/(1-Zbilger)))
+	phi = S*((ZBilger/(1-ZBilger)))
 	return phi
