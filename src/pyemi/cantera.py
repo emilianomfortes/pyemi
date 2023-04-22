@@ -67,6 +67,75 @@ def bilger_Z(mass_frac, gas_fuel, gas_ox, dict_bilger = {"C": 2.0,"S": 2.0,"H": 
     Zbilger = (Z_mix - Z_ox) / (Z_fuel - Z_ox)
     return Zbilger
 
+
+def get_species_fluxes(df, gas):
+	"""Calculates the species fluxes from the mass fractions and the
+	velocity field. The species fluxes are returned in a pandas DataFrame
+	with the same index as the input DataFrame."""
+
+	df_aux = df.copy()
+
+	for k in gas.species_names:
+		ik = gas.species_index(k)
+		df_aux[f"jstar_{k}"] = -1.0 * \
+		df_aux["rho"] * gas.molecular_weights[ik] * \
+		(df_aux["W"]**(-1)) * df_aux[f"Dk_{k}"] * \
+		grid_deriv(df_aux["x"], df_aux[f"Xk_{k}"])
+
+	for k in gas.species_names:
+		ik = gas.species_index(k)
+		df[f"j_{k}"] = df_aux[f"jstar_{k}"].copy()
+		for j in gas.species_names:
+			ij = gas.species_index(j)
+			df[f"j_{k}"] -= df_aux[k] * df_aux[f"jstar_{j}"]
+
+	return df
+
+
+def getZfromflux(df, gas, dict_bilger, beta_fuel, beta_oxi):
+
+    df["j_Z"] = 0.0
+    for el, wel in dict_bilger.items():
+        if el in gas.species_names:
+            df[f"j_Z{el}"] = 0.0
+            for k in gas.species_names:
+                ik = gas.species_index(k)
+                Wik = gas.molecular_weights[ik]
+                akp = gas.n_atoms(k, el)
+                df[f"j_Z{el}"] += (akp/Wik) * df[f"j_{k}"]
+            df["j_Z"] += (wel / (beta_fuel - beta_oxi)) * df[f"j_Z{el}"]
+
+    return df["j_Z"]
+
+
+def getHeatRel(df, mech):
+
+	_df = df.copy()
+	gas = ct.Solution(mech)
+	W = gas.molecular_weights
+	gas.TP = 298.15, 1e5
+	dHf0 = {}
+	for k in gas.species_names:
+		ik = gas.species_index(k)
+		dHf0[k] = (
+			298.15
+			* ct.gas_constant
+			/ (W[ik])
+			* gas.standard_enthalpies_RT[gas.species_index(k)]
+		)
+	_df["HeatRel"] = 0.0
+	for k in gas.species_names:
+		_df["HeatRel"] += _df[f"omega_{k}"] * dHf0[k]
+
+	# Heat release should be positive, but sometimes
+	# it is negative because of author's choice of
+	# the sign convention for the reaction enthalpy
+	# of formation. This is a hack to fix that.
+
+	_df["HeatRel"] = _df["HeatRel"].abs()
+
+	return _df["HeatRel"]
+
 #
 # Mixture average tabulation
 #
