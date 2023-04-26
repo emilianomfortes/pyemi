@@ -31,12 +31,34 @@ def calc_progress_var_df(df_flamelet, Yc_species, Yc_weights):
 
 
 def thermal_flame_thickness(flame):
+    """Calculates the thermal flame thickness for a 1d flame."""
+    
+    
     if isinstance(flame, pd.DataFrame):
+        
+        # Physical space
+        if "x(m)" in flame.columns:
+            print(f"Found x(m) in columns")
+            x = flame["x(m)"].to_numpy()
+            
+        elif "x" in flame.columns:
+            print(f"Found x in columns")
+            x = flame["x"].to_numpy()
+        
+        # Temperature
+        if "T(K)" in flame.columns:
+            print(f"Found T(K) in columns")
+            T = flame["T(K)"].to_numpy()
+        elif "T" in flame.columns:
+            print(f"Found T in columns")
+            T = flame["T"].to_numpy()
+        
         max_grad = np.max(
-            grid_deriv(flame["x(m)"].to_numpy(), flame["T(K)"].to_numpy())
+            grid_deriv(x, T)
         )
-        T_u = flame["T(K)"].to_numpy()[0]
-        T_b = flame["T(K)"].to_numpy()[-1]
+        T_u = T[0]
+        T_b = T[-1]
+        
     else:
         max_grad = np.max(grid_deriv(flame.grid, flame.T))
         T_u = flame.T[0]
