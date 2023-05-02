@@ -74,3 +74,11 @@ def trapezoidal_integration(f, x):
         F[i] = F[i-1] + h/2 * (f_eval[i-1] + f_eval[i])  # trapezoidal rule formula
     
     return F
+
+# -------------
+# Array scaling
+# -------------
+def arr_scale_linear(arr, minval, maxval):
+	a = (maxval - minval) / (arr.max() - arr.min())
+	b = maxval - a * arr.max()
+	return a * arr + b
