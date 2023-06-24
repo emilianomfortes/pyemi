@@ -4,6 +4,21 @@ import json
 import yaml
 import os
 
+# ---
+# Directories
+# ---
+
+def find_dir_up_from_cwd(dir_name):
+	"""Find the directory up from the current working directory"""
+	cwd = Path.cwd()
+	while True:
+		if dir_name in [d.name for d in cwd.iterdir() if d.is_dir()]:
+			print(f"Found directory {dir_name} from {cwd}, returning {cwd / dir_name}")
+			return cwd / dir_name
+		else:
+			cwd = cwd.parent
+			if cwd == Path.cwd().root:
+				raise FileNotFoundError(f"Could not find directory {dir_name} from {Path.cwd()}")
 
 def check_make_dir(path):
     # If folder doesn't exist, then create it.
