@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyemi"
-version = "0.0.13"
+version = "0.0.14"
 authors = [
   { name="Emiliano Manuel Fortes Soplanes", email="emiliano.fortes@bsc.es" },
 ]
