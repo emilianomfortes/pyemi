@@ -15,23 +15,23 @@ import os
 def laminar_flame_speed(v_u, v_b, rho_u, rho_b, df=None, stationary=False):
 
     if isinstance(df, pd.DataFrame):
-	v_col = None
-	rho_col = None
+        v_col = None
+        rho_col = None
 
-	potential_rho_cols = ["DENSI", "rho", "RHO", "rho(kg/m3)", "rho(kg/m^3)"]
-	for col in potential_rho_cols:
-	    if col in list(df.columns):
-	         rho_col = col
-	potential_vel_cols = ["u_x", "u(m/s)", "u"]
-	for col in potential_vel_cols:
-	    if col in list(df.columns):
-	         vel_col = col
+        potential_rho_cols = ["DENSI", "rho", "RHO", "rho(kg/m3)", "rho(kg/m^3)"]
+        for col in potential_rho_cols:
+            if col in list(df.columns):
+                rho_col = col
+        potential_vel_cols = ["u_x", "u(m/s)", "u"]
+        for col in potential_vel_cols:
+            if col in list(df.columns):
+                vel_col = col
 
-	v_u = df[vel_col].iloc[0]
-	v_b = df[vel_col].iloc[-1]
-	rho_u = df[rho_col].iloc[0]
-	rho_b = df[rho_col].iloc[-1]
-	
+        v_u = df[vel_col].iloc[0]
+        v_b = df[vel_col].iloc[-1]
+        rho_u = df[rho_col].iloc[0]
+        rho_b = df[rho_col].iloc[-1]
+
     """Calculates the laminar flame speed s_l for a 1d flame."""
     if stationary:
         # Flame front doesn't move
