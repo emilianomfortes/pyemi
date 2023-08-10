@@ -172,8 +172,13 @@ def getZfromflux(df, gas, dict_bilger, beta_fuel, beta_oxi):
     return df["j_Z"]
 
 
-def getHeatRel(df, mech):
-    _df = df.copy()
+def getHeatRel(data, mech):
+
+    if isinstance(data, pd.DataFrame):
+        _data = data.copy()
+    elif isinstance(data, dict):
+        _data = dict(data)
+
     gas = ct.Solution(mech)
     W = gas.molecular_weights
     gas.TP = 298.15, 1e5
@@ -186,18 +191,20 @@ def getHeatRel(df, mech):
             / (W[ik])
             * gas.standard_enthalpies_RT[gas.species_index(k)]
         )
-    _df["HeatRel"] = 0.0
+    _data["HeatRel"] = 0.0
     for k in gas.species_names:
-        _df["HeatRel"] += _df[f"omega_{k}"] * dHf0[k]
+        _data["HeatRel"] += _data[f"omega_{k}"] * dHf0[k]
 
     # Heat release should be positive, but sometimes
     # it is negative because of author's choice of
     # the sign convention for the reaction enthalpy
     # of formation. This is a hack to fix that.
-
-    _df["HeatRel"] = _df["HeatRel"].abs()
-
-    return _df["HeatRel"]
+    if isinstance(data, pd.DataFrame):
+        _data["HeatRel"] = _data["HeatRel"].abs()
+    elif isinstance(data, dict):
+        _data["HeatRel"] = np.abs(_data["HeatRel"])
+    
+    return _data["HeatRel"]
 
 
 #
