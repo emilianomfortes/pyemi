@@ -4,9 +4,34 @@ import json
 import yaml
 import os
 
-# ---
+# 
 # Directories
-# ---
+# 
+
+def make_path_relative_to_dir(path, dir_name):
+    # Try to find path above, if not return original path
+    if not isinstance(path, Path):
+        raise TypeError(f"path must be of type pathlib.Path, not {type(path)}")
+
+    try:
+        path_dir_name = find_dir_up_from_cwd(dir_name)
+    except:
+        print(f"Could not find relative path for dir_name={dir_name}")
+        return path
+
+    # Check if dir_name is in the parts of path
+    path_parts = path.parts
+    if dir_name not in path_parts:
+        print(f"Could not find {dir_name} in path parts")
+        return path
+    else:
+        # Find index of dir_name in path_parts
+        i_dir_name = path_parts.index(dir_name)
+        
+        # Make relative path
+        path_relative = Path(*path_parts[i_dir_name:])
+        return path_relative
+
 
 def find_dir_up_from_cwd(dir_name):
 	"""Find the directory up from the current working directory"""
@@ -30,6 +55,9 @@ def check_make_dir(path):
     else:
         print(path, "folder already exists.")
 
+#
+# Reading files
+#
 
 def read_json(path_json):
     with open(path_json) as f:
@@ -43,6 +71,9 @@ def read_yaml(path_file) -> dict:
         _file = yaml.safe_load(f)
     return _file
 
+#
+# Strings
+#
 
 def find_line(str_find, lines):
     for idx, line in enumerate(lines):
