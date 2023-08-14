@@ -28,10 +28,15 @@ def plot_dimensions():
   #
   # Journal LaTeX parameters
   #
+
+  # Elsevier: https://www.elsevier.com/authors/policies-and-guidelines/artwork-and-media-instructions/artwork-sizing
   dims["Journal"] = {}
   dims["Journal"]["elsevier-twocolumn-A4"] = {}
   dims["Journal"]["elsevier-twocolumn-A4"]["pt"] = {}
   dims["Journal"]["elsevier-twocolumn-A4"]["pt"]["margin"] = 34.51605
   dims["Journal"]["elsevier-twocolumn-A4"]["pt"]["top"] = 52.74657
-
+  dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["Single column"]["width"]["pt"] = 255
+  dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["1.5 column"]["width"]["pt"] = 297
+  dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["Double column"]["width"]["pt"] = 539
+  
   return dims
