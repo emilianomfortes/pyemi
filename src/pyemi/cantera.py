@@ -172,7 +172,7 @@ def getZfromflux(df, gas, dict_bilger, beta_fuel, beta_oxi):
     return df["j_Z"]
 
 
-def getHeatRel(data, mech):
+def HeatReleaseRate(data, mech):
 
     if isinstance(data, pd.DataFrame):
         _data = data.copy()
