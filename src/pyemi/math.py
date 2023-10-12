@@ -1,6 +1,29 @@
 import pandas as pd
 import numpy as np
 
+def find_tangent_vector(data, col_n_x=None, col_n_y=None):
+
+    if isinstance(data, pd.DataFrame):
+
+        assert col_n_x is not None
+        assert col_n_y is not None
+
+        nx = data[col_n_x].to_numpy()
+        ny = data[col_n_y].to_numpy()
+        tx = np.zeros_like(nx)
+        ty = np.zeros_like(ny)
+        
+    tx = ny
+    ty = -nx
+
+    return tx, ty
+
+
+
+# -------
+# Differentiation
+# -------
+
 def grid_deriv(grid, arr):
     if isinstance(grid, pd.Series):
         grid = grid.to_numpy()
