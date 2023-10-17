@@ -40,5 +40,14 @@ def plot_dimensions():
   dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["Single column_width_pt"] = 255
   dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["1.5 column_width_pt"] = 297
   dims["Journal"]["elsevier-twocolumn-A4"]["Figure"]["Double column_width_pt"] = 539
+
+  # International Combustion Symposium 40th edition
+  # https://www.combustioninstitute.org/wp-content/uploads/2023/08/Instructions-to-Authors-for-Manuscript-Preparation.40thISOC.pdf
+  journal = "40th International Symposium on Combustion"
+  dims["Journal"][journal] = {}
+  dims["Journal"][journal]["Figure"] = {}
+  dims["Journal"][journal]["Figure"]["Single_width_in"] = 2.67
+  dims["Journal"][journal]["Figure"]["Double_width_in"] = 5.67
+
   
   return dims
