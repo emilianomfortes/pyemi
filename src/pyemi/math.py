@@ -18,8 +18,6 @@ def find_tangent_vector(data, col_n_x=None, col_n_y=None):
 
     return tx, ty
 
-
-
 # -------
 # Differentiation
 # -------
