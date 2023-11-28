@@ -46,8 +46,8 @@ def plot_dimensions():
   journal = "40th International Symposium on Combustion"
   dims["Journal"][journal] = {}
   dims["Journal"][journal]["Figure"] = {}
-  dims["Journal"][journal]["Figure"]["Single_width_in"] = 2.67
-  dims["Journal"][journal]["Figure"]["Double_width_in"] = 5.67
+  dims["Journal"][journal]["Figure"]["Single_width_in"] = 3.5416666667
+  dims["Journal"][journal]["Figure"]["Double_width_in"] = 7.4861111111
 
   
   return dims
