@@ -6,7 +6,6 @@ import pandas as pd
 def default_mpl_style():
 
   mpl.rcParams['text.usetex'] = True
-  mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}']
   mpl.rcParams['font.family'] = 'serif'
 
   mpl.rcParams['font.size'] = 8.0
