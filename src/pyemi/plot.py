@@ -1,5 +1,48 @@
+from copy import deepcopy
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
+
+def default_mpl_style():
+
+  mpl.rcParams['text.usetex'] = True
+  mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}']
+  mpl.rcParams['font.family'] = 'serif'
+
+  mpl.rcParams['font.size'] = 8.0
+
+  #
+  # Figure
+  #
+  mpl.rcParams['figure.titlesize'] = 8.0
+
+
+  #
+  # Axes
+  #
+  mpl.rcParams['axes.titlesize'] = 8.0
+
+  #
+  # Legend
+  #
+  mpl.rcParams['legend.fontsize'] = 8.0
+
+  #
+  # Lines
+  #
+  mpl.rcParams['lines.linewidth'] = 1.0
+  mpl.rcParams['lines.markersize'] = 3.0
+
+  #
+  # Ticks
+  #
+  mpl.rcParams['xtick.labelsize'] = 8.0
+  mpl.rcParams['ytick.labelsize'] = 8.0
+  mpl.rcParams['xtick.direction'] = "inout"
+  mpl.rcParams['ytick.direction'] = "inout" 
+
+  rcParams = deepcopy(mpl.rcParams)
+  return rcParams
 
 def plot_dimensions():
 
