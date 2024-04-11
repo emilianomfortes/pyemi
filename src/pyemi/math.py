@@ -1,3 +1,4 @@
+from scipy.signal import savgol_filter
 import pandas as pd
 import numpy as np
 
@@ -68,6 +69,58 @@ def decreasing_linspace(start, stop, num, base=2):
     # The formula below ensures that the spacing decreases as the index increases
     spacings = (1 - base ** (-powers)) / (1 - base ** (-1))
     return start + spacings * (stop - start)
+	
+def interp_deriv(grid, arr, der=1):
+	# https://en.wikipedia.org/wiki/Finite_difference_coefficient
+	if isinstance(grid, pd.Series):
+		grid = grid.to_numpy()
+	if isinstance(arr, pd.Series):
+		arr = arr.to_numpy()
+	coeffs_1 = {
+		-4: 1/280.0, 
+		-3: -4/105.0,
+		-2: 1/5.0, 
+		-1: -4/5.0,
+		0: 0, 
+		1: 4/5.0, 
+		2: -1/5.0, 
+		3: 4/105.0,
+		4:-1/280.0,
+		}
+
+	#arr = savgol_filter(arr, 10, 5)
+	arr_interp = interp1d(grid, arr, kind="linear", fill_value="extrapolate")
+	gradi = np.zeros_like(arr)
+
+	if len(grid) == 1:
+		return gradi
+
+	for k in range(1, len(grid) - 1):
+		dx_left = grid[k] - grid[k - 1]
+		dx_right = grid[k + 1] - grid[k]
+		h = min(dx_left, dx_right) / 4
+		x = grid[k]
+		for i in range(-4, 5):
+			gradi[k] += coeffs_1[i] * arr_interp(x + i * h)
+		gradi[k] /= h
+
+	# Extreme left
+	dx_right = grid[1] - grid[0]
+	h = dx_right
+	x = grid[0]
+	for i in range(-4, 5):
+		gradi[0] += coeffs_1[i] * arr_interp(x + i * h)
+	gradi[0] /= h
+
+	# Extreme right
+	dx_left = grid[-1] - grid[-2]
+	h = dx_left
+	x = grid[-1]
+	for i in range(-4, 5):
+		gradi[-1] += coeffs_1[i] * arr_interp(x + i * h)
+	gradi[-1] /= h
+
+	return gradi
 
 # ----------
 # Integration
