@@ -10,6 +10,34 @@ import os
 
 
 #
+# Flame
+#
+def FreeFlame_good_convergence(
+    gas,
+    initial_grid,
+    timestep=1e-5, 
+    timestep_tries=[2, 5, 10, 20, 40, 50], 
+    ratio=2, 
+    slope=0.001, 
+    curve=0.01, 
+    max_grid_points=10000, 
+    tol_ss = [1.0e-7, 1.0e-12], 
+    tol_ts = [1.0e-7, 1.0e-12],
+    max_jac_age=10,
+    ):
+
+    flame = ct.FreeFlame(gas, grid=initial_grid)
+    flame.flame.set_steady_tolerances(default=tol_ss)
+    flame.flame.set_transient_tolerances(default=tol_ts)
+    flame.energy_enabled = True
+    flame.set_max_jac_age(max_jac_age, max_jac_age)
+    flame.set_max_grid_points(flame.flame, max_grid_points)
+    flame.set_time_step(timestep, timestep_tries)
+    flame.set_refine_criteria(ratio=ratio, slope=slope, curve=curve)
+
+    return flame
+
+#
 # Flame properties
 #
 def laminar_flame_speed(v_u, v_b, rho_u, rho_b, df=None, stationary=False):
