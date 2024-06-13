@@ -142,6 +142,16 @@ def bilger_beta(
             ) / gas.atomic_weight(element)
     return beta
 
+def Z_from_flame_df(df_flame, mech, pressure, X_fuel, X_oxidizer, species_col_prefix="Y_", Z_weights={"C": 2.0, "S": 2.0, "H": 0.5, "O": -1.0}):
+
+    T_in = df_flame["T"].iloc[0]
+    gas_oxi = ct.Solution(mech)
+    gas_oxi.TPX = T_in, pressure, X_oxidizer
+    gas_fuel = ct.Solution(mech)
+    gas_fuel.TPX = T_in, pressure, X_fuel
+    Yk = df_flame[[f"Y_{s}" for s in gas_fuel.species_names]].to_numpy().T
+
+    Z = bilger_Z(Yk, gas_fuel, gas_oxi, Z_weights)
 
 def bilger_Z(
     mass_frac,
