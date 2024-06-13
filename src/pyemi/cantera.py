@@ -152,6 +152,7 @@ def Z_from_flame_df(df_flame, mech, pressure, X_fuel, X_oxidizer, species_col_pr
     Yk = df_flame[[f"Y_{s}" for s in gas_fuel.species_names]].to_numpy().T
 
     Z = bilger_Z(Yk, gas_fuel, gas_oxi, Z_weights)
+    return Z
 
 def bilger_Z(
     mass_frac,
